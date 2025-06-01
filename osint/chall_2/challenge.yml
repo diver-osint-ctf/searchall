@@ -2,6 +2,7 @@ name: "Geolocation Challenge"
 description: "Find the location from image metadata"
 tags:
   - easy
+  - web
   - osint
   - geolocation
   - metadata

@@ -2,6 +2,8 @@
 
 CTF 問題のタグ検索ツールです。
 
+![demo](./demo.gif)
+
 ## 機能
 
 - 指定されたタグが含まれるチャレンジを検索
@@ -28,15 +30,16 @@ go build -o searchall
 
 ## 使用方法
 
-### インタラクティブモード（推奨）
-
 ```bash
-# 引数なしで実行すると、リアルタイム検索モードに入ります
-./searchall
+# 引数なしで実行すると、インタラクティブ検索モードに入ります
+$ ./searchall
 
 # 静的検索モード
-./searchall easy
+$ ./searchall medium
+- "Social Media Investigation"
 
 # 複数のタグを指定して検索も可能
-./searchall sql-injection geolocation
+$ ./searchall sql-injection geolocation
+- "SQL Injection Basics"
+- "Geolocation Challenge"
 ```
