@@ -1,4 +1,4 @@
-# SearchAll: Search All CTF Challenges
+# SearchAll: SEARCH ALL ctf CHALLenges
 
 CTF 問題のタグ検索ツールです。
 
