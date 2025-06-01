@@ -1,0 +1,10 @@
+name: "Geolocation Challenge"
+description: "Find the location from image metadata"
+tags:
+  - easy
+  - osint
+  - geolocation
+  - metadata
+  - intermediate
+flag: "flag{geo_location_found}"
+author: "OSINT Team"

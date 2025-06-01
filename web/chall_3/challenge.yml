@@ -1,0 +1,10 @@
+name: "SQL Injection Basics"
+description: "Basic SQL injection vulnerability"
+tags:
+  - easy
+  - webandosint
+  - sql-injection
+  - beginner
+  - database
+flag: "flag{sql_injection_basics}"
+author: "Web Security Team"

@@ -1,0 +1,9 @@
+name: "Social Media Investigation"
+description: "Find information from social media posts"
+tags:
+  - medium
+  - osint
+  - social-media
+  - beginner
+flag: "flag{social_media_osint_basics}"
+author: "OSINT Team"

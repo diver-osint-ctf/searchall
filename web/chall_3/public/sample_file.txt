@@ -1,0 +1,2 @@
+This is a sample file for Web challenge 3.
+It contains SQL injection vulnerability examples. 

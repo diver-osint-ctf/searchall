@@ -1,0 +1,2 @@
+This is a sample file for OSINT challenge 2.
+It contains geolocation data and metadata. 

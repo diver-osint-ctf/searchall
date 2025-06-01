@@ -1,0 +1,2 @@
+This is a sample file for OSINT challenge 1.
+It contains some social media investigation data. 
