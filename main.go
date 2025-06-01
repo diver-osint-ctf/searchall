@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/manifoldco/promptui"
 	"golang.org/x/term"
 	"gopkg.in/yaml.v3"
 )
@@ -59,10 +58,8 @@ func main() {
 			return
 		}
 
-		// Display results with selection interface
-		if err := displayResults(results); err != nil {
-			log.Fatalf("Failed to display results: %v", err)
-		}
+		// Display results in markdown format
+		displayMarkdownResults(results)
 	}
 }
 
@@ -328,48 +325,9 @@ func hasMatchingTag(challengeTags []string, searchTags []string) bool {
 	return false
 }
 
-// displayResults shows the results using a promptui interface
-func displayResults(results []ChallengeResult) error {
-	if len(results) == 1 {
-		// If only one result, display it directly
-		result := results[0]
-		fmt.Printf("Found: %s\n", result.Name)
-		fmt.Printf("Tags: %s\n", strings.Join(result.Tags, ", "))
-		fmt.Printf("Path: %s\n", result.FilePath)
-		return nil
+// displayMarkdownResults displays the results in markdown list format
+func displayMarkdownResults(results []ChallengeResult) {
+	for _, result := range results {
+		fmt.Printf("- \"%s\"\n", result.Name)
 	}
-
-	// Create display strings for selection
-	items := make([]string, len(results))
-	for i, result := range results {
-		items[i] = fmt.Sprintf("%s (tags: %s)",
-			result.Name,
-			strings.Join(result.Tags, ", "))
-	}
-
-	// Use promptui to select
-	prompt := promptui.Select{
-		Label: "Select a challenge",
-		Items: items,
-		Templates: &promptui.SelectTemplates{
-			Label:    "{{ . }}:",
-			Active:   "▸ {{ .String | cyan }}",
-			Inactive: "  {{ .String }}",
-			Selected: "✔ {{ .String | green }}",
-		},
-		Size: 10,
-	}
-
-	idx, _, err := prompt.Run()
-	if err != nil {
-		return fmt.Errorf("selection cancelled or failed: %w", err)
-	}
-
-	// Display selected result
-	selected := results[idx]
-	fmt.Printf("\nSelected: %s\n", selected.Name)
-	fmt.Printf("Tags: %s\n", strings.Join(selected.Tags, ", "))
-	fmt.Printf("Path: %s\n", selected.FilePath)
-
-	return nil
 }
