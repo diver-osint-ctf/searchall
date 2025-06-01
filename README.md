@@ -14,7 +14,7 @@ CTF 問題のタグ検索ツールです。
 - **インタラクティブ検索モード**: 引数なしで実行すると、リアルタイムでタグをフィルタリング
 - **静的検索モード**: 引数ありで実行すると、指定されたタグで即座に検索して出力
 
-## セットアップ
+## Setup
 
 1. download dependencies
 
@@ -28,7 +28,13 @@ go mod download
 go build -o searchall
 ```
 
-## 使用方法
+3. パスを通す（optional）
+
+```bash
+export PATH=$PATH:$(pwd)
+```
+
+## How to use
 
 ```bash
 # 引数なしで実行すると、インタラクティブ検索モードに入ります
