@@ -1,0 +1,9 @@
+name: "another_branch_chall"
+description: "another_branch_chall description"
+tags:
+  - easy
+  - web
+  - osint
+  - another_branch_chall
+flag: "flag{another_branch_chall_flag}"
+author: "OSINT Team"
