@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/fs"
 	"log"
@@ -25,32 +26,52 @@ type Challenge struct {
 
 // ChallengeResult holds challenge information with its file path
 type ChallengeResult struct {
-	Name     string
-	Tags     []string
-	FilePath string
+	Name       string
+	Tags       []string
+	FilePath   string
+	BranchName string // Branch name where the challenge was found
 }
 
 func main() {
+	// Parse flags
+	allBranches := flag.Bool("all-branches", false, "Search challenges across all local branches")
+	flag.Parse()
+
 	// Load config.yaml
 	config, err := loadConfig("config.yaml")
 	if err != nil {
 		log.Fatalf("Failed to load config.yaml: %v", err)
 	}
 
+	// Select appropriate loader
+	var loader ChallengeLoader
+	if *allBranches {
+		currentBranch, err := getCurrentBranch()
+		if err != nil {
+			log.Fatalf("Failed to get current branch: %v", err)
+		}
+		loader = &MultiBranchLoader{CurrentBranch: currentBranch}
+	} else {
+		// Use file system loader for backward compatibility
+		loader = &FileSystemLoader{BranchName: ""}
+	}
+
 	// Load all challenges once
-	allChallenges, err := loadAllChallenges(config.Genre)
+	allChallenges, err := loader.LoadChallenges(config.Genre)
 	if err != nil {
 		log.Fatalf("Failed to load challenges: %v", err)
 	}
 
-	if len(os.Args) < 2 {
+	// Get non-flag arguments (tags)
+	searchTags := flag.Args()
+
+	if len(searchTags) == 0 {
 		// Interactive dynamic search mode
 		if err := interactiveSearch(allChallenges); err != nil {
 			log.Fatalf("Interactive search failed: %v", err)
 		}
 	} else {
 		// Static search mode with provided tags
-		searchTags := os.Args[1:]
 		results := filterChallengesByTags(allChallenges, searchTags)
 
 		if len(results) == 0 {
@@ -190,9 +211,16 @@ func displaySearchUIWithCursor(input string, cursorPos int, challenges []Challen
 		fmt.Print("No challenges found\r\n")
 	} else {
 		for _, challenge := range challenges {
-			fmt.Printf("- %s (tags: %s)\r\n",
-				challenge.Name,
-				strings.Join(challenge.Tags, ", "))
+			if challenge.BranchName != "" {
+				fmt.Printf("- [%s] %s (tags: %s)\r\n",
+					challenge.BranchName,
+					challenge.Name,
+					strings.Join(challenge.Tags, ", "))
+			} else {
+				fmt.Printf("- %s (tags: %s)\r\n",
+					challenge.Name,
+					strings.Join(challenge.Tags, ", "))
+			}
 		}
 	}
 }
@@ -244,9 +272,10 @@ func loadAllChallenges(genres []string) ([]ChallengeResult, error) {
 			}
 
 			allChallenges = append(allChallenges, ChallengeResult{
-				Name:     challenge.Name,
-				Tags:     challenge.Tags,
-				FilePath: path,
+				Name:       challenge.Name,
+				Tags:       challenge.Tags,
+				FilePath:   path,
+				BranchName: "",
 			})
 
 			return nil
@@ -328,6 +357,10 @@ func hasMatchingTag(challengeTags []string, searchTags []string) bool {
 // displayMarkdownResults displays the results in markdown list format
 func displayMarkdownResults(results []ChallengeResult) {
 	for _, result := range results {
-		fmt.Printf("- \"%s\"\n", result.Name)
+		if result.BranchName != "" {
+			fmt.Printf("- [%s] \"%s\"\n", result.BranchName, result.Name)
+		} else {
+			fmt.Printf("- \"%s\"\n", result.Name)
+		}
 	}
 }
