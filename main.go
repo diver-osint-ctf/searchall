@@ -70,7 +70,7 @@ func interactiveSearch(allChallenges []ChallengeResult) error {
 	if err != nil {
 		return fmt.Errorf("failed to set raw mode: %w", err)
 	}
-	defer term.Restore(int(os.Stdin.Fd()), oldState)
+	defer func() { _ = term.Restore(int(os.Stdin.Fd()), oldState) }()
 
 	// Clear screen and hide cursor
 	clearScreen()

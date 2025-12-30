@@ -187,8 +187,10 @@ tags:
 
 	// Change to temporary directory to test
 	oldWd, _ := os.Getwd()
-	defer os.Chdir(oldWd)
-	os.Chdir(tmpDir)
+	defer func() { _ = os.Chdir(oldWd) }()
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("Failed to change directory: %v", err)
+	}
 
 	// Test finding challenges
 	genres := []string{"web", "osint"}
