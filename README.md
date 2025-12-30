@@ -16,21 +16,12 @@ CTF 問題のタグ検索ツールです。
 
 ## Setup
 
-1. download dependencies
-
 ```bash
+# 1. download dependencies
 go mod download
-```
-
-2. build
-
-```bash
+# 2. build
 go build -o searchall
-```
-
-3. パスを通す（optional）
-
-```bash
+# 3. パスを通す（optional）
 export PATH=$PATH:$(pwd)
 ```
 
